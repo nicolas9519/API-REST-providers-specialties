@@ -1,0 +1,36 @@
+{
+  "name": "api-rest-providers-specialties",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node dist/server.js",
+    "dev": "tsc && node -r dotenv/config dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolas9519/API-REST-providers-specialties.git"
+  },
+  "author": "Nicolas Patiño Cañas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolas9519/API-REST-providers-specialties/issues"
+  },
+  "homepage": "https://github.com/nicolas9519/API-REST-providers-specialties#readme",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "^4.17.6",
+    "@types/helmet": "0.0.47",
+    "@types/mongoose": "^5.7.21",
+    "dotenv": "^8.2.0",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
+    "mongoose": "^5.9.16"
+  }
+}
