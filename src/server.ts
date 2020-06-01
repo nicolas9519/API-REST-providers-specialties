@@ -3,19 +3,21 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import app from './app';
-import { config } from './config/config';
+import { general } from './config/config';
 
-if (config.env === 'develop') {
-  app.listen(config.port, function () {
-    console.log('Express server listening on port ' + config.port);
+const PORT = general.port || 3000;
+
+if (general.env === 'develop') {
+  app.listen(PORT, function listenApp() {
+    console.log('Express server listening on port ' + PORT);
   });
 } else {
   const httpsOptions = {
-    key: fs.readFileSync(path.join(config.path_https_cert, 'key.pem')),
-    cert: fs.readFileSync(path.join(config.path_https_cert, 'cert.pem'))
+    key: fs.readFileSync(path.join(general.path_https_cert, 'key.pem')),
+    cert: fs.readFileSync(path.join(general.path_https_cert, 'cert.pem'))
   }
 
-  https.createServer(httpsOptions, app).listen(config.port, function () {
-    console.log('Express server listening on port ' + config.port);
+  https.createServer(httpsOptions, app).listen(PORT, function listenServer() {
+    console.log('Express server listening on port ' + PORT);
   });
 }
