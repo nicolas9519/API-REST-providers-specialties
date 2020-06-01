@@ -1,6 +1,6 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
-import { ProviderEnum } from '../../enums';
+import { ProviderEnum } from '../../utils/enums';
 
 interface IProvider extends Document {
   firstName: string;
