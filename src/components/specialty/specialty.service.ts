@@ -15,4 +15,27 @@ export class SpecialtyService {
     const specialties: ISpecialty[] = await MongoDatabase.Models.Specialty.find(filters, null, paging);
     return specialties;
   }
+
+  public async getById(id: string): Promise<ISpecialty> {
+    const specialty: ISpecialty = await MongoDatabase.Models.Specialty.findById(id);
+    return specialty;
+  }
+
+  public async create(data: Partial<ISpecialty>): Promise<ISpecialty> {
+    const specialty = new MongoDatabase.Models.Specialty(data);
+    await specialty.save();
+    return specialty.toJSON();
+  }
+
+  public async update(id: string, data: Partial<ISpecialty>): Promise<ISpecialty> {
+    const specialty = await MongoDatabase.Models.Specialty.findByIdAndUpdate(id, data, { new: true });
+    return specialty.toJSON();
+  }
+
+  public async delete(id: string): Promise<ISpecialty> {
+    const specialty = await MongoDatabase.Models.Specialty.findByIdAndDelete(id);
+    // TODO: Find and later update, error 404 not found when it's not found
+    return specialty.toJSON();
+  }
+
 }

@@ -7,3 +7,13 @@ export const getAll = Joi.object({
   createdBy: Joi.number().optional(),
   updatedBy: Joi.number().optional(),
 });
+
+export const create = Joi.object({
+  name: Joi.string().required(),
+  createdBy: Joi.number().required()
+});
+
+export const update = Joi.object({
+  name: Joi.string().required(),
+  updatedBy: Joi.number().required()
+});

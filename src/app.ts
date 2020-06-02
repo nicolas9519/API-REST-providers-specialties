@@ -8,8 +8,8 @@ class App {
 
   public app: express.Application;
   private routes: Routes;
-  
-  constructor () {
+
+  constructor() {
     this.app = express();
     this.config();
     this.routes = new Routes();

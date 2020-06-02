@@ -13,7 +13,7 @@ export class Routes {
   }
 
   private async notFound(req: Request, res: Response): Promise<void> {
-    res.status(404).json({ message: 'Sorry, resource not found '});
+    res.status(404).json({ message: 'Sorry, resource not found ' });
   }
 
   private async errorHandler(error: any, req: Request, res: Response, next: NextFunction): Promise<void> {

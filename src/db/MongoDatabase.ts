@@ -16,7 +16,7 @@ export class MongoDatabase {
   private connection: Connection;
   private models: IModels;
 
-  constructor () {
+  constructor() {
     connect(database.mongo_db_url, {
       useNewUrlParser: true,
       useFindAndModify: true,
@@ -43,7 +43,7 @@ export class MongoDatabase {
     console.log('Connected successfully');
   }
 
-  private errorConnect(error: Error ) {
+  private errorConnect(error: Error) {
     throw error;
   }
 
