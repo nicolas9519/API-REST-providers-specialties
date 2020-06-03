@@ -2,6 +2,8 @@
 
 This project is a practice to use these technologies.
 
+[Postman documentation](https://documenter.getpostman.com/view/1902911/SztG25gS?version=latest#5806e93d-a3fc-4d9f-85e3-6c8e397f15e9)
+
 ## Requirements
 
 NodeJs: 12.16.2 or greater

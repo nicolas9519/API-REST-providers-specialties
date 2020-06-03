@@ -1,6 +1,8 @@
 import { Application, Request, Response, NextFunction } from 'express';
 
 import { SpecialtyController } from '../components';
+import { general } from '../config/config';
+import { StatusCodes, NotFound, ErrorStatus, ErrorList } from '../utils/ErrorStatus';
 
 export class Routes {
   public init(app: Application) {
@@ -12,14 +14,18 @@ export class Routes {
     app.use(this.errorHandler);
   }
 
-  private async notFound(req: Request, res: Response): Promise<void> {
-    res.status(404).json({ message: 'Sorry, resource not found ' });
+  private async notFound(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const error = new NotFound('Resource not found');
+    next(error);
   }
 
   private async errorHandler(error: any, req: Request, res: Response, next: NextFunction): Promise<void> {
-    const bodyError = {
-      message: error.message || error.name,
+    const statusCode: number = error.statusCode || StatusCodes.BAD_IMPLEMENTATION;
+    const message: string = error.message || ErrorList.BAD_IMPLEMENTATION;
+    if (general.env !== 'develop') {
+      delete error.stack;
     }
-    res.status(500).json(bodyError);
+    const newError = new ErrorStatus(statusCode, error.name, message, error.payload, error.stack);
+    res.status(statusCode).json(newError);
   }
 }

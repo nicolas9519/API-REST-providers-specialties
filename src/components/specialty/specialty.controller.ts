@@ -1,6 +1,9 @@
 import { Application, Router, NextFunction, Request, Response } from 'express';
+
 import { create, getAll, update } from './specialty.schemas';
 import { SpecialtyService } from './specialty.service';
+import responseJson from '../../utils/functions/responseJson';
+import validateJoi from '../../utils/functions/ValidateJoi';
 
 export class SpecialtyController {
 
@@ -21,12 +24,9 @@ export class SpecialtyController {
 
   public async getAll(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      let filters = req.query;
-      if (req.query) {
-        filters = await getAll.validateAsync(req.query);
-      }
+      const filters = validateJoi(getAll, req.query);
       const specialties = await this.specialtyService.getAll(filters);
-      return res.status(200).json(specialties);
+      return responseJson(res, 200, specialties);
     } catch (error) {
       return next(error);
     }
@@ -34,8 +34,8 @@ export class SpecialtyController {
 
   public async getById(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const specialties = await this.specialtyService.getById(req.params.id);
-      return res.status(200).json(specialties);
+      const specialty = await this.specialtyService.getById(req.params.id);
+      return responseJson(res, 200, specialty);
     } catch (error) {
       return next(error);
     }
@@ -43,9 +43,9 @@ export class SpecialtyController {
 
   public async create(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const body = await create.validateAsync(req.body);
-      const specialties = await this.specialtyService.create(body);
-      return res.status(200).json(specialties);
+      const body = validateJoi(create, req.body);
+      const specialty = await this.specialtyService.create(body);
+      return responseJson(res, 200, specialty);
     } catch (error) {
       return next(error);
     }
@@ -53,9 +53,9 @@ export class SpecialtyController {
 
   public async update(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const body = await update.validateAsync(req.body);
-      const specialties = await this.specialtyService.update(req.params.id, body);
-      return res.status(200).json(specialties);
+      const body = validateJoi(update, req.body);
+      const specialty = await this.specialtyService.update(req.params.id, body);
+      return responseJson(res, 200, specialty);
     } catch (error) {
       return next(error);
     }
@@ -63,8 +63,8 @@ export class SpecialtyController {
 
   public async deleteById(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const specialties = await this.specialtyService.delete(req.params.id);
-      return res.status(200).json(specialties);
+      const specialty = await this.specialtyService.delete(req.params.id);
+      return responseJson(res, 200, specialty);
     } catch (error) {
       return next(error);
     }

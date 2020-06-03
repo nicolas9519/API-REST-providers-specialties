@@ -1,3 +1,4 @@
+import { NotFound } from '../../utils/ErrorStatus';
 import { MongoDatabase } from '../../db/MongoDatabase';
 import { ISpecialty } from './interfaces/ISpecialty'
 
@@ -18,6 +19,9 @@ export class SpecialtyService {
 
   public async getById(id: string): Promise<ISpecialty> {
     const specialty: ISpecialty = await MongoDatabase.Models.Specialty.findById(id);
+    if (!specialty) {
+      throw new NotFound('Specialty not found');
+    }
     return specialty;
   }
 
@@ -28,13 +32,20 @@ export class SpecialtyService {
   }
 
   public async update(id: string, data: Partial<ISpecialty>): Promise<ISpecialty> {
-    const specialty = await MongoDatabase.Models.Specialty.findByIdAndUpdate(id, data, { new: true });
+    const specialty = await MongoDatabase.Models.Specialty.findById(id);
+    if (!specialty) {
+      throw new NotFound('Specialty not found');
+    }
+    await specialty.updateOne(data, { runValidators: true }); //TODO: Return update data
     return specialty.toJSON();
   }
 
   public async delete(id: string): Promise<ISpecialty> {
-    const specialty = await MongoDatabase.Models.Specialty.findByIdAndDelete(id);
-    // TODO: Find and later update, error 404 not found when it's not found
+    const specialty = await MongoDatabase.Models.Specialty.findById(id);
+    if (!specialty) {
+      throw new NotFound('Specialty not found');
+    }
+    await specialty.remove();
     return specialty.toJSON();
   }
 
