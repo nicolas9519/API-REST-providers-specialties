@@ -15,11 +15,12 @@ export class Specialty {
 
   constructor() {
     const schema = new Schema({
-      name: { type: String, required: true },
+      name: { type: String, required: true, unique: true },
       createdBy: { type: Number },
-      createdAt: { type: Date, default: Date.now },
       updatedBy: { type: Number },
-      updatedAt: { type: Date, default: Date.now }
+    }, {
+      timestamps: true,
+      versionKey: false,
     });
     this._model = model<ISpecialty>('Specialty', schema);
   }

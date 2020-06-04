@@ -8,8 +8,8 @@ class App {
 
   public app: express.Application;
   private routes: Routes;
-  
-  constructor () {
+
+  constructor() {
     this.app = express();
     this.config();
     this.routes = new Routes();
@@ -18,6 +18,9 @@ class App {
 
   private config() {
     this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({
+      extended: true
+    }));
     this.app.use(helmet());
   }
 

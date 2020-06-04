@@ -16,20 +16,20 @@ export class MongoDatabase {
   private connection: Connection;
   private models: IModels;
 
-  constructor () {
+  constructor() {
     connect(database.mongo_db_url, {
       useNewUrlParser: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
       useUnifiedTopology: true,
       useCreateIndex: true,
-    })
+    });
     this.connection = connection;
     this.connection.once('open', this.connected);
     this.connection.on('error', this.errorConnect);
     this.models = {
       Specialty: new Specialty().model(),
       Provider: new Provider().model(),
-    }
+    };
   }
 
   public static get Models(): IModels {
@@ -43,7 +43,7 @@ export class MongoDatabase {
     console.log('Connected successfully');
   }
 
-  private errorConnect(error: Error ) {
+  private errorConnect(error: Error) {
     throw error;
   }
 

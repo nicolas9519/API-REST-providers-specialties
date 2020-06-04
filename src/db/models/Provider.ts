@@ -1,6 +1,6 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
-import { ProviderEnum } from '../../enums';
+import { ProviderEnum } from '../../utils/enums';
 
 interface IProvider extends Document {
   firstName: string;
@@ -39,11 +39,12 @@ export class Provider {
       employerId: { type: Number },
       assignedTo: { type: Number },
       createdBy: { type: Number },
-      createdAt: { type: Date, default: Date.now },
       updatedBy: { type: Number },
-      updatedAt: { type: Date, default: Date.now },
       stage: { type: String },
       profilePhoto: { type: Buffer }
+    }, {
+      timestamps: true,
+      versionKey: false,
     });
     this._model = model<IProvider>('Provider', schema);
   }
