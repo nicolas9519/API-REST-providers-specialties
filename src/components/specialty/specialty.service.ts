@@ -26,22 +26,25 @@ export class SpecialtyService {
   }
 
   public async create(data: Partial<ISpecialty>): Promise<ISpecialty> {
+    const specialtyExist = await MongoDatabase.Models.Specialty.findOne({ name: data.name });
+    if (specialtyExist) {
+      throw ErrorStatus.conflict('A specialty with this name already exist', { name: data.name });
+    }
     const specialty = new MongoDatabase.Models.Specialty(data);
     await specialty.save();
     return specialty.toJSON();
   }
 
   public async update(id: string, data: Partial<ISpecialty>): Promise<ISpecialty> {
-    const specialty = await MongoDatabase.Models.Specialty.findById(id);
+    const specialty = await MongoDatabase.Models.Specialty.findOneAndUpdate({ _id: id }, data, { new: true });
     if (!specialty) {
       throw ErrorStatus.notFound('Specialty not found');
     }
-    const test = await specialty.updateOne(data, { runValidators: true }); //TODO: Return update data
     return specialty.toJSON();
   }
 
   public async delete(id: string): Promise<ISpecialty> {
-    const specialty = await MongoDatabase.Models.Specialty.findById(id);
+    const specialty = await MongoDatabase.Models.Specialty.findOneAndDelete({_id: id});
     if (!specialty) {
       throw ErrorStatus.notFound('Specialty not found');
     }

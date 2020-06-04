@@ -15,19 +15,19 @@ export class Routes {
   }
 
   private async notFound(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const error = ErrorStatus.notFound('Resource not found');
+    const error = ErrorStatus.notImplemented('Method not found');
     next(error);
   }
 
   private async errorHandler(error: any, req: Request, res: Response, next: NextFunction): Promise<void> {
     let newError = error;
     if (!newError.handledError) {
-      newError = ErrorStatus.badRequest(error.message, error.payload, error.stack)
+      newError = ErrorStatus.badImplementation(error.message, error.payload, error.stack)
     }
     if (general.env !== 'develop') {
-      delete error.stack;
+      delete newError.stack;
     }
-    delete error.handledError;
+    delete newError.handledError;
     res.status(newError.statusCode).json(newError);
   }
 }

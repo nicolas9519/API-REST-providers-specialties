@@ -2,8 +2,9 @@ import { Application, Router, NextFunction, Request, Response } from 'express';
 
 import { create, getAll, update } from './specialty.schemas';
 import { SpecialtyService } from './specialty.service';
-import responseJson from '../../utils/functions/responseJson';
-import validateJoi from '../../utils/functions/ValidateJoi';
+import responseJson from '../../utils/helperFunctions/responseJson';
+import validateJoi from '../../utils/helperFunctions/validateJoi';
+import validateMongoId from '../../utils/helperFunctions/validateMongoId';
 
 export class SpecialtyController {
 
@@ -34,6 +35,7 @@ export class SpecialtyController {
 
   public async getById(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
+      validateMongoId(req.params.id);
       const specialty = await this.specialtyService.getById(req.params.id);
       return responseJson(res, 200, specialty);
     } catch (error) {
@@ -45,7 +47,7 @@ export class SpecialtyController {
     try {
       const body = validateJoi(create, req.body);
       const specialty = await this.specialtyService.create(body);
-      return responseJson(res, 200, specialty);
+      return responseJson(res, 201, specialty);
     } catch (error) {
       return next(error);
     }
@@ -53,6 +55,7 @@ export class SpecialtyController {
 
   public async update(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
+      validateMongoId(req.params.id);
       const body = validateJoi(update, req.body);
       const specialty = await this.specialtyService.update(req.params.id, body);
       return responseJson(res, 200, specialty);
@@ -63,6 +66,7 @@ export class SpecialtyController {
 
   public async deleteById(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
+      validateMongoId(req.params.id);
       const specialty = await this.specialtyService.delete(req.params.id);
       return responseJson(res, 200, specialty);
     } catch (error) {

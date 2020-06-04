@@ -19,17 +19,17 @@ export class MongoDatabase {
   constructor() {
     connect(database.mongo_db_url, {
       useNewUrlParser: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
       useUnifiedTopology: true,
       useCreateIndex: true,
-    })
+    });
     this.connection = connection;
     this.connection.once('open', this.connected);
     this.connection.on('error', this.errorConnect);
     this.models = {
       Specialty: new Specialty().model(),
       Provider: new Provider().model(),
-    }
+    };
   }
 
   public static get Models(): IModels {
