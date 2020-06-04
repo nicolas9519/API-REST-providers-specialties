@@ -1,14 +1,16 @@
-export enum ErrorList {
-  BAD_REQUEST = 'Bad request',
-  NOT_FOUND = 'Not Found',
-  BAD_IMPLEMENTATION = 'Internal server error'
-};
+const errorList: Map<number, string> = new Map(
+  [
+    [400, 'Bad request'],
+    [404, 'Not found'],
+    [500, 'Internal server error'],
+  ]
+);
 
-export enum StatusCodes {
+enum StatusCodes {
   BAD_REQUEST = 400,
   NOT_FOUND = 404,
   BAD_IMPLEMENTATION = 500
-}
+};
 
 export class ErrorStatus {
   public statusCode: StatusCodes;
@@ -16,24 +18,29 @@ export class ErrorStatus {
   public message: string;
   public payload: { [key: string]: any };
   public stack: string;
+  public handledError: boolean = true;
 
-  constructor(statusCode: StatusCodes, name: string, message: string, payload?: { [key: string]: any }, stack?: string) {
+  private constructor(statusCode: StatusCodes, message: string, payload?: { [key: string]: any }, stack?: string) {
     this.statusCode = statusCode;
-    this.name = name;
+    this.name = errorList.get(statusCode);
     this.message = message;
     this.payload = payload;
     this.stack = stack;
   }
-}
 
-export class BadRequest extends ErrorStatus {
-  constructor(message: string, payload?: { [key: string]: any }, stack?: string) {
-    super(StatusCodes.BAD_REQUEST, ErrorList.BAD_REQUEST, message, payload, stack);
+  public static badRequest(message: string, payload?: { [key: string]: any }, stack?: string): ErrorStatus {
+    const error: ErrorStatus = new ErrorStatus(StatusCodes.BAD_REQUEST, message, payload, stack);
+    return error;
   }
-}
 
-export class NotFound extends ErrorStatus {
-  constructor(message: string, payload?: { [key: string]: any }, stack?: string) {
-    super(StatusCodes.NOT_FOUND, ErrorList.NOT_FOUND, message, payload, stack);
+  public static notFound(message: string, payload?: { [key: string]: any }, stack?: string): ErrorStatus {
+    const error: ErrorStatus = new ErrorStatus(StatusCodes.NOT_FOUND, message, payload, stack);
+    return error;
   }
+
+  public static badImplementation(message: string, payload?: { [key: string]: any }, stack?: string): ErrorStatus {
+    const error: ErrorStatus = new ErrorStatus(StatusCodes.BAD_IMPLEMENTATION, message, payload, stack);
+    return error;
+  }
+
 }

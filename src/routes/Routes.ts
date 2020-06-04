@@ -2,7 +2,7 @@ import { Application, Request, Response, NextFunction } from 'express';
 
 import { SpecialtyController } from '../components';
 import { general } from '../config/config';
-import { StatusCodes, NotFound, ErrorStatus, ErrorList } from '../utils/ErrorStatus';
+import { ErrorStatus } from '../utils/ErrorStatus';
 
 export class Routes {
   public init(app: Application) {
@@ -15,17 +15,19 @@ export class Routes {
   }
 
   private async notFound(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const error = new NotFound('Resource not found');
+    const error = ErrorStatus.notFound('Resource not found');
     next(error);
   }
 
   private async errorHandler(error: any, req: Request, res: Response, next: NextFunction): Promise<void> {
-    const statusCode: number = error.statusCode || StatusCodes.BAD_IMPLEMENTATION;
-    const message: string = error.message || ErrorList.BAD_IMPLEMENTATION;
+    let newError = error;
+    if (!newError.handledError) {
+      newError = ErrorStatus.badRequest(error.message, error.payload, error.stack)
+    }
     if (general.env !== 'develop') {
       delete error.stack;
     }
-    const newError = new ErrorStatus(statusCode, error.name, message, error.payload, error.stack);
-    res.status(statusCode).json(newError);
+    delete error.handledError;
+    res.status(newError.statusCode).json(newError);
   }
 }
