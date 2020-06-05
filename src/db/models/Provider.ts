@@ -7,7 +7,7 @@ interface IProvider extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  specialty: string;
+  specialty: Schema.Types.ObjectId;
   projectedStartDate: Date;
   employerId: number;
   providerType: string;
@@ -17,8 +17,8 @@ interface IProvider extends Document {
   stage: string;
   createdBy: number;
   createdAt: Date;
-  updatedBy?: number;
-  updatedAt?: Date;
+  updatedBy: number;
+  updatedAt: Date;
 }
 
 export interface ProviderModel extends Model<IProvider> { };

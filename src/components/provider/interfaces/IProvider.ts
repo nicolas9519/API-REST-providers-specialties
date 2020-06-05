@@ -1,9 +1,11 @@
+import { Schema } from "mongoose";
+
 export interface IProvider {
-  _id: string;
+  _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   email: string;
-  specialty: string;
+  specialty: Schema.Types.ObjectId;
   projectedStartDate: Date;
   employerId: number;
   providerType: string;
