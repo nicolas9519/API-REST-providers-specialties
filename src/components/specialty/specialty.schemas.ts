@@ -1,4 +1,4 @@
-import * as Joi from '@hapi/joi'
+import * as Joi from '@hapi/joi';
 
 export const getAll = Joi.object({
   offSet: Joi.number().optional(),

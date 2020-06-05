@@ -1,11 +1,12 @@
 import { Schema } from "mongoose";
+import { ISpecialty } from "../../specialty/interfaces/ISpecialty";
 
 export interface IProvider {
   _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   email: string;
-  specialty: Schema.Types.ObjectId;
+  specialty: ISpecialty | Schema.Types.ObjectId;
   projectedStartDate: Date;
   employerId: number;
   providerType: string;

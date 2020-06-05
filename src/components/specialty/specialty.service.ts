@@ -6,9 +6,10 @@ import { ISpecialty } from './interfaces/ISpecialty';
 
 export class SpecialtyService {
 
-  public async getAll(filters: IObject, paging: QueryFindOptions): Promise<ISpecialty[]> {
+  public async getAll(filters: IObject, paging: QueryFindOptions): Promise<{ specialties: ISpecialty[], quantity: number }> {
     const specialties: ISpecialty[] = await MongoDatabase.Models.Specialty.find(filters, null, paging);
-    return specialties;
+    const quantity = await MongoDatabase.Models.Specialty.count(filters);
+    return { specialties, quantity };
   }
 
   public async getById(id: Schema.Types.ObjectId): Promise<ISpecialty> {
@@ -30,6 +31,7 @@ export class SpecialtyService {
   }
 
   public async update(id: Schema.Types.ObjectId, data: Partial<ISpecialty>): Promise<ISpecialty> {
+    // TODO: validate in case of the name previously exists
     const specialty = await MongoDatabase.Models.Specialty.findOneAndUpdate({ _id: id }, data, { new: true });
     if (!specialty) {
       throw ErrorStatus.notFound('Specialty not found');
@@ -38,7 +40,7 @@ export class SpecialtyService {
   }
 
   public async delete(id: Schema.Types.ObjectId): Promise<ISpecialty> {
-    const specialty = await MongoDatabase.Models.Specialty.findOneAndDelete({_id: id});
+    const specialty = await MongoDatabase.Models.Specialty.findOneAndDelete({ _id: id });
     if (!specialty) {
       throw ErrorStatus.notFound('Specialty not found');
     }

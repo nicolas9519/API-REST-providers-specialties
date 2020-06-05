@@ -19,7 +19,7 @@ export class SpecialtyController {
     router.get('', this.getAll.bind(this));
     router.post('', this.create.bind(this));
     router.get('/:id', this.getById.bind(this));
-    router.patch('/:id', this.update.bind(this));
+    router.put('/:id', this.update.bind(this));
     router.delete('/:id', this.deleteById.bind(this));
 
     app.use('/specialty', router);
@@ -42,8 +42,8 @@ export class SpecialtyController {
         filters[key] = query[key];
       }
 
-      const specialties = await this.specialtyService.getAll(filters, paging);
-      return responseJson(res, 200, specialties);
+      const { specialties, quantity } = await this.specialtyService.getAll(filters, paging);
+      return responseJson(res, 200, specialties, quantity);
     } catch (error) {
       return next(error);
     }

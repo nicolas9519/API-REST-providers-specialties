@@ -2,12 +2,13 @@ import { Schema, Document, Model, model } from 'mongoose';
 
 import { ProviderEnum } from '../../utils/enums';
 import { PROVIDER_TYPES, PROVIDER_STAFF_STATUS, PROVIDER_STATUS } from '../../utils/constants';
+import { ISpecialty } from '../../components/specialty/interfaces/ISpecialty';
 
 interface IProvider extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  specialty: Schema.Types.ObjectId;
+  specialty: ISpecialty;
   projectedStartDate: Date;
   employerId: number;
   providerType: string;
@@ -32,8 +33,7 @@ export class Provider {
       lastName: { type: String, required: true },
       email: { type: String, required: true, unique: true },
       specialty: {
-        type: Schema.Types.ObjectId,
-        ref: 'Specialty',
+        type: Object,
         required: true
       },
       projectedStartDate: { type: Date, required: true },
