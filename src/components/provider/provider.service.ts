@@ -15,7 +15,7 @@ export class ProviderService {
 
   public async getAll(filters: IObject, paging: QueryFindOptions): Promise<{ providers: IProvider[], quantity: number }> {
     const providers: IProvider[] = await MongoDatabase.Models.Provider.find(filters, null, paging);
-    const quantity = await MongoDatabase.Models.Provider.estimatedDocumentCount(filters);
+    const quantity = await MongoDatabase.Models.Provider.countDocuments(filters);
     return { providers, quantity };
   }
 

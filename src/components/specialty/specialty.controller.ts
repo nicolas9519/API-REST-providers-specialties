@@ -1,10 +1,11 @@
 import { Application, NextFunction, Request, Response, Router } from 'express';
 import { QueryFindOptions } from 'mongoose';
+import createFilters from '../../utils/helperFunctions/createFilters';
 import responseJson from '../../utils/helperFunctions/responseJson';
 import validateJoi from '../../utils/helperFunctions/validateJoi';
 import validateMongoId from '../../utils/helperFunctions/validateMongoId';
 import { IObject } from '../../utils/interfaces/IObject';
-import { create, getAll, update } from './specialty.schemas';
+import { create, getAll, getAllMap, update } from './specialty.schemas';
 import { SpecialtyService } from './specialty.service';
 
 
@@ -34,14 +35,7 @@ export class SpecialtyController {
       };
       delete query.offSet;
       delete query.limit;
-
-      const filters: IObject = {};
-      if (query.name) filters.name = { $regex: `${query.name}` };
-      delete query.name;
-      for (const key in query) {
-        filters[key] = query[key];
-      }
-
+      const filters: IObject = createFilters(query, getAllMap);
       const { specialties, quantity } = await this.specialtyService.getAll(filters, paging);
       return responseJson(res, 200, specialties, quantity);
     } catch (error) {

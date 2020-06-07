@@ -1,5 +1,11 @@
 import * as Joi from '@hapi/joi';
 
+export const getAllMap: Map<string, string> = new Map(
+  [
+    ['name', 'string']
+  ]
+);
+
 export const getAll = Joi.object({
   offSet: Joi.number().optional(),
   limit: Joi.number().optional(),

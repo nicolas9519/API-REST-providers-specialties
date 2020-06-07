@@ -1,10 +1,11 @@
 import { Application, NextFunction, Request, Response, Router } from "express";
 import { QueryFindOptions } from "mongoose";
+import createFilters from "../../utils/helperFunctions/createFilters";
 import responseJson from "../../utils/helperFunctions/responseJson";
 import validateJoi from "../../utils/helperFunctions/validateJoi";
 import validateMongoId from "../../utils/helperFunctions/validateMongoId";
 import { IObject } from "../../utils/interfaces/IObject";
-import { create, getAll, update } from "./provider.schemas";
+import { create, getAll, getAllMap, update } from "./provider.schemas";
 import { ProviderService } from "./provider.service";
 
 export class ProviderController {
@@ -35,10 +36,7 @@ export class ProviderController {
       delete query.offSet;
       delete query.limit;
 
-      const filters: IObject = {};
-      for (const key in query) {
-        filters[key] = query[key];
-      }
+      const filters: IObject = createFilters(query, getAllMap);
       const { providers, quantity } = await this.providerService.getAll(filters, paging);
       return responseJson(res, 200, providers, quantity);
     } catch (error) {

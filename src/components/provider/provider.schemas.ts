@@ -2,9 +2,35 @@ import * as Joi from '@hapi/joi';
 import { PROVIDER_STAFF_STATUS, PROVIDER_STATUS, PROVIDER_TYPES } from '../../utils/constants';
 import validateMongoId from '../../utils/helperFunctions/validateMongoId';
 
+export const getAllMap: Map<string, string> = new Map(
+  [
+    ['firstName', 'string'],
+    ['lastName', 'string'],
+    ['email', 'string'],
+    ['specialty', 'ObjectId'],
+    ['projectedStartDate', 'date'],
+    ['providerType', 'multiple'],
+    ['staffStatus', 'multiple'],
+    ['status', 'multiple'],
+  ]
+)
+
 export const getAll = Joi.object({
   offSet: Joi.number().optional(),
   limit: Joi.number().optional(),
+  firstName: Joi.string().optional(),
+  lastName: Joi.string().optional(),
+  email: Joi.string().optional(),
+  specialty: Joi.custom(validateMongoId).optional(),
+  projectedStartDate: Joi.date().iso().optional(),
+  providerType: Joi.string().optional(),
+  staffStatus: Joi.string().optional(),
+  status: Joi.string().optional(),
+  employerId: Joi.number().optional(),
+  assignedTo: Joi.number().optional(),
+  createdBy: Joi.number().optional(),
+  updatedBy: Joi.number().optional(),
+  stage: Joi.string().optional(),
 });
 
 export const providerSchema = Joi.object({
@@ -12,7 +38,7 @@ export const providerSchema = Joi.object({
   lastName: Joi.string().required(),
   email: Joi.string().email().required(),
   specialty: Joi.custom(validateMongoId).required(),
-  projectedStartDate: Joi.date().required(),
+  projectedStartDate: Joi.date().iso().required(),
   providerType: Joi.string().valid(...PROVIDER_TYPES).required(),
   staffStatus: Joi.string().valid(...PROVIDER_STAFF_STATUS).required(),
   status: Joi.string().valid(...PROVIDER_STATUS).required(),

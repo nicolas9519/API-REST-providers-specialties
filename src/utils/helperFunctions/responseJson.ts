@@ -6,6 +6,6 @@ export default function responseJson<T>(res: Response, statusCode: number, data:
     statusCode,
     data
   };
-  if (quantity) response.total = quantity;
+  if (quantity !== undefined) response.total = quantity;
   return res.status(response.statusCode).json(response);
 }

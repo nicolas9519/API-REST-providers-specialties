@@ -8,7 +8,7 @@ export class SpecialtyService {
 
   public async getAll(filters: IObject, paging: QueryFindOptions): Promise<{ specialties: ISpecialty[], quantity: number }> {
     const specialties: ISpecialty[] = await MongoDatabase.Models.Specialty.find(filters, null, paging);
-    const quantity = await MongoDatabase.Models.Specialty.estimatedDocumentCount(filters);
+    const quantity = await MongoDatabase.Models.Specialty.countDocuments(filters);
     return { specialties, quantity };
   }
 
