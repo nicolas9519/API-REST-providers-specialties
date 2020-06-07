@@ -8,7 +8,7 @@ export class SpecialtyService {
 
   public async getAll(filters: IObject, paging: QueryFindOptions): Promise<{ specialties: ISpecialty[], quantity: number }> {
     const specialties: ISpecialty[] = await MongoDatabase.Models.Specialty.find(filters, null, paging);
-    const quantity = await MongoDatabase.Models.Specialty.count(filters);
+    const quantity = await MongoDatabase.Models.Specialty.estimatedDocumentCount(filters);
     return { specialties, quantity };
   }
 
@@ -21,17 +21,14 @@ export class SpecialtyService {
   }
 
   public async create(data: Partial<ISpecialty>): Promise<ISpecialty> {
-    const specialtyExist = await MongoDatabase.Models.Specialty.findOne({ name: data.name });
-    if (specialtyExist) {
-      throw ErrorStatus.conflict('A specialty with this name already exist', { name: data.name });
-    }
+    await this.validateNameSpecialty(data.name);
     const specialty = new MongoDatabase.Models.Specialty(data);
     await specialty.save();
     return specialty.toJSON();
   }
 
   public async update(id: Schema.Types.ObjectId, data: Partial<ISpecialty>): Promise<ISpecialty> {
-    // TODO: validate in case of the name previously exists
+    await this.validateNameSpecialty(data.name, id);
     const specialty = await MongoDatabase.Models.Specialty.findOneAndUpdate({ _id: id }, data, { new: true });
     if (!specialty) {
       throw ErrorStatus.notFound('Specialty not found');
@@ -44,8 +41,14 @@ export class SpecialtyService {
     if (!specialty) {
       throw ErrorStatus.notFound('Specialty not found');
     }
-    await specialty.remove();
     return specialty.toJSON();
+  }
+
+  public async validateNameSpecialty(name: string, id?: Schema.Types.ObjectId): Promise<void> {
+    const specialtyExist = await MongoDatabase.Models.Specialty.findOne({ name });
+    if (specialtyExist && specialtyExist.id !== id) {
+      throw ErrorStatus.conflict('A specialty with this name already exist', { name });
+    }
   }
 
 }

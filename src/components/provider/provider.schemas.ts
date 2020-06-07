@@ -16,14 +16,9 @@ export const providerSchema = Joi.object({
   providerType: Joi.string().valid(...PROVIDER_TYPES).required(),
   staffStatus: Joi.string().valid(...PROVIDER_STAFF_STATUS).required(),
   status: Joi.string().valid(...PROVIDER_STATUS).required(),
-  employerId: Joi.number().optional(),
-  assignedTo: Joi.number()
-    .when('employerId', {
-      is: Joi.exist(),
-      then: Joi.required(),
-      otherwise: Joi.optional()
-    }),
-})
+  employerId: Joi.number().allow(null).optional(),
+  assignedTo: Joi.number().allow(null).optional()
+}).and('employerId', 'assignedTo')
 
 export const create = providerSchema.append({
   createdBy: Joi.number().required(),

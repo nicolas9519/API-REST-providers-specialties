@@ -2,10 +2,10 @@ import { Application, NextFunction, Request, Response, Router } from "express";
 import { QueryFindOptions } from "mongoose";
 import responseJson from "../../utils/helperFunctions/responseJson";
 import validateJoi from "../../utils/helperFunctions/validateJoi";
-import { IObject } from "../../utils/interfaces/IObject";
-import { getAll, create } from "./provider.schemas";
-import { ProviderService } from "./provider.service";
 import validateMongoId from "../../utils/helperFunctions/validateMongoId";
+import { IObject } from "../../utils/interfaces/IObject";
+import { create, getAll, update } from "./provider.schemas";
+import { ProviderService } from "./provider.service";
 
 export class ProviderController {
 
@@ -19,6 +19,8 @@ export class ProviderController {
     router.get('', this.getAll.bind(this));
     router.post('', this.create.bind(this));
     router.get('/:id', this.getById.bind(this));
+    router.put('/:id', this.update.bind(this));
+    router.delete('/:id', this.delete.bind(this));
 
     app.use('/provider', router);
   }
@@ -58,6 +60,27 @@ export class ProviderController {
     try {
       const id = validateMongoId(req.params.id);
       const provider = await this.providerService.getById(id);
+      return responseJson(res, 200, provider);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async update(req: Request, res: Response, next: NextFunction): Promise<any> {
+    try {
+      const id = validateMongoId(req.params.id);
+      const body = validateJoi(update, req.body);
+      const provider = await this.providerService.update(id, body);
+      return responseJson(res, 200, provider);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async delete(req: Request, res: Response, next: NextFunction): Promise<any> {
+    try {
+      const id = validateMongoId(req.params.id);
+      const provider = await this.providerService.delete(id);
       return responseJson(res, 200, provider);
     } catch (error) {
       next(error);
