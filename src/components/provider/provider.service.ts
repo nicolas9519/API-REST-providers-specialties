@@ -13,8 +13,8 @@ export class ProviderService {
     this.specialtyService = new SpecialtyService();
   }
 
-  public async getAll(filters: IObject, paging: QueryFindOptions): Promise<{ providers: IProvider[], quantity: number }> {
-    const providers: IProvider[] = await MongoDatabase.Models.Provider.find(filters, null, paging);
+  public async getAll(filters: IObject<any>, paging: QueryFindOptions, sort: IObject<number>): Promise<{ providers: IProvider[], quantity: number }> {
+    const providers: IProvider[] = await MongoDatabase.Models.Provider.find(filters, null, paging).sort(sort);
     const quantity = await MongoDatabase.Models.Provider.countDocuments(filters);
     return { providers, quantity };
   }

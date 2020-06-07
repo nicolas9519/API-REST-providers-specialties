@@ -1,10 +1,8 @@
 import { Application, NextFunction, Request, Response, Router } from 'express';
-import { QueryFindOptions } from 'mongoose';
-import createFilters from '../../utils/helperFunctions/createFilters';
+import organizeQuery from '../../utils/helperFunctions/createFilters';
 import responseJson from '../../utils/helperFunctions/responseJson';
 import validateJoi from '../../utils/helperFunctions/validateJoi';
 import validateMongoId from '../../utils/helperFunctions/validateMongoId';
-import { IObject } from '../../utils/interfaces/IObject';
 import { create, getAll, getAllMap, update } from './specialty.schemas';
 import { SpecialtyService } from './specialty.service';
 
@@ -29,14 +27,8 @@ export class SpecialtyController {
   public async getAll(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
       const query = validateJoi(getAll, req.query);
-      const paging: QueryFindOptions = {
-        skip: query.offSet || 0,
-        limit: query.limit || 10,
-      };
-      delete query.offSet;
-      delete query.limit;
-      const filters: IObject = createFilters(query, getAllMap);
-      const { specialties, quantity } = await this.specialtyService.getAll(filters, paging);
+      const { filters, paging, sort } = organizeQuery(query, getAllMap);
+      const { specialties, quantity } = await this.specialtyService.getAll(filters, paging, sort);
       return responseJson(res, 200, specialties, quantity);
     } catch (error) {
       return next(error);

@@ -6,8 +6,8 @@ import { ISpecialty } from './interfaces/ISpecialty';
 
 export class SpecialtyService {
 
-  public async getAll(filters: IObject, paging: QueryFindOptions): Promise<{ specialties: ISpecialty[], quantity: number }> {
-    const specialties: ISpecialty[] = await MongoDatabase.Models.Specialty.find(filters, null, paging);
+  public async getAll(filters: IObject<any>, paging: QueryFindOptions, sort: IObject<number>): Promise<{ specialties: ISpecialty[], quantity: number }> {
+    const specialties: ISpecialty[] = await MongoDatabase.Models.Specialty.find(filters, null, paging).sort(sort);
     const quantity = await MongoDatabase.Models.Specialty.countDocuments(filters);
     return { specialties, quantity };
   }

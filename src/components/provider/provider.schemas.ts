@@ -2,18 +2,16 @@ import * as Joi from '@hapi/joi';
 import { PROVIDER_STAFF_STATUS, PROVIDER_STATUS, PROVIDER_TYPES } from '../../utils/constants';
 import validateMongoId from '../../utils/helperFunctions/validateMongoId';
 
-export const getAllMap: Map<string, string> = new Map(
-  [
-    ['firstName', 'string'],
-    ['lastName', 'string'],
-    ['email', 'string'],
-    ['specialty', 'ObjectId'],
-    ['projectedStartDate', 'date'],
-    ['providerType', 'multiple'],
-    ['staffStatus', 'multiple'],
-    ['status', 'multiple'],
-  ]
-)
+export const getAllMap = {
+  firstName: 'string',
+  lastName: 'string',
+  email: 'string',
+  specialty: 'ObjectId',
+  projectedStartDate: 'date',
+  providerType: 'multiple',
+  staffStatus: 'multiple',
+  status: 'multiple',
+};
 
 export const getAll = Joi.object({
   offSet: Joi.number().optional(),
@@ -31,6 +29,7 @@ export const getAll = Joi.object({
   createdBy: Joi.number().optional(),
   updatedBy: Joi.number().optional(),
   stage: Joi.string().optional(),
+  sort: Joi.string().optional()
 });
 
 export const providerSchema = Joi.object({
