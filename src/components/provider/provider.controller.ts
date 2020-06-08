@@ -5,6 +5,7 @@ import validateJoi from "../../utils/helperFunctions/validateJoi";
 import validateMongoId from "../../utils/helperFunctions/validateMongoId";
 import { create, getAll, getAllMap, update } from "./provider.schemas";
 import { ProviderService } from "./provider.service";
+import { UploadFile } from "../../utils/multer";
 
 export class ProviderController {
 
@@ -16,7 +17,7 @@ export class ProviderController {
     this.providerService = new ProviderService();
 
     router.get('', this.getAll.bind(this));
-    router.post('', this.create.bind(this));
+    router.post('', UploadFile.createStorage('profile').single('profilePhoto'), this.create.bind(this));
     router.get('/:id', this.getById.bind(this));
     router.put('/:id', this.update.bind(this));
     router.delete('/:id', this.delete.bind(this));

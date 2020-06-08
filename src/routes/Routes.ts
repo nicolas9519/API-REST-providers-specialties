@@ -1,5 +1,5 @@
 import { Application, NextFunction, Request, Response } from 'express';
-import { ProviderController, SpecialtyController } from '../components';
+import { FilesController, ProviderController, SpecialtyController } from '../components';
 import { general } from '../config/config';
 import { ErrorStatus } from '../utils/ErrorStatus';
 
@@ -8,6 +8,7 @@ export class Routes {
 
     new SpecialtyController(app);
     new ProviderController(app);
+    new FilesController(app);
 
     app.use('*', this.notFound);
 

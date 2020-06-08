@@ -1,3 +1,5 @@
+import { existsSync, mkdirSync } from 'fs';
+
 const general = {
   port: process.env.PORT,
   env: process.env.NODE_ENV,
@@ -6,9 +8,18 @@ const general = {
 
 const database = {
   mongo_db_url: process.env.MONGO_DB_URL
+};
+
+const fileHandler = {
+  file_path: process.env.FILES_PATH
+};
+
+if (!existsSync(fileHandler.file_path)) {
+  mkdirSync(fileHandler.file_path);
 }
 
 export {
   general,
-  database
+  database,
+  fileHandler
 };
