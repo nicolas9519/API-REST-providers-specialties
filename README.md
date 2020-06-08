@@ -24,6 +24,7 @@ npm install
     PORT           |Port where is going to start the server
     PATH_HTTP_CERT |Path where are the SSL certificates
     MONGO_DB_URL   |URL to connect to mongodb, this must have a user and password in the URL
+    FILES_PATH     |Local folder to save the new files
 
 1. Second, you have to run the server
     - If you're a developer testing you can use `npm run dev`

@@ -1,10 +1,11 @@
-import { Application, Router, NextFunction, Request, Response } from 'express';
-
-import { create, getAll, update } from './specialty.schemas';
-import { SpecialtyService } from './specialty.service';
+import { Application, NextFunction, Request, Response, Router } from 'express';
+import organizeQuery from '../../utils/helperFunctions/createFilters';
 import responseJson from '../../utils/helperFunctions/responseJson';
 import validateJoi from '../../utils/helperFunctions/validateJoi';
 import validateMongoId from '../../utils/helperFunctions/validateMongoId';
+import { create, getAll, getAllMap, update } from './specialty.schemas';
+import { SpecialtyService } from './specialty.service';
+
 
 export class SpecialtyController {
 
@@ -17,7 +18,7 @@ export class SpecialtyController {
     router.get('', this.getAll.bind(this));
     router.post('', this.create.bind(this));
     router.get('/:id', this.getById.bind(this));
-    router.patch('/:id', this.update.bind(this));
+    router.put('/:id', this.update.bind(this));
     router.delete('/:id', this.deleteById.bind(this));
 
     app.use('/specialty', router);
@@ -25,9 +26,10 @@ export class SpecialtyController {
 
   public async getAll(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const filters = validateJoi(getAll, req.query);
-      const specialties = await this.specialtyService.getAll(filters);
-      return responseJson(res, 200, specialties);
+      const query = validateJoi(getAll, req.query);
+      const { filters, paging, sort } = organizeQuery(query, getAllMap);
+      const { specialties, quantity } = await this.specialtyService.getAll(filters, paging, sort);
+      return responseJson(res, 200, specialties, quantity);
     } catch (error) {
       return next(error);
     }
@@ -35,8 +37,8 @@ export class SpecialtyController {
 
   public async getById(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      validateMongoId(req.params.id);
-      const specialty = await this.specialtyService.getById(req.params.id);
+      const id = validateMongoId(req.params.id);
+      const specialty = await this.specialtyService.getById(id);
       return responseJson(res, 200, specialty);
     } catch (error) {
       return next(error);
@@ -55,9 +57,9 @@ export class SpecialtyController {
 
   public async update(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      validateMongoId(req.params.id);
+      const id = validateMongoId(req.params.id);
       const body = validateJoi(update, req.body);
-      const specialty = await this.specialtyService.update(req.params.id, body);
+      const specialty = await this.specialtyService.update(id, body);
       return responseJson(res, 200, specialty);
     } catch (error) {
       return next(error);
@@ -66,8 +68,8 @@ export class SpecialtyController {
 
   public async deleteById(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      validateMongoId(req.params.id);
-      const specialty = await this.specialtyService.delete(req.params.id);
+      const id = validateMongoId(req.params.id);
+      const specialty = await this.specialtyService.delete(id);
       return responseJson(res, 200, specialty);
     } catch (error) {
       return next(error);

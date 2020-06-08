@@ -1,6 +1,6 @@
-import { Connection, connection, connect } from 'mongoose';
+import { Connection, connection, connect, set } from 'mongoose';
 
-import { database } from '../config/config';
+import { database, general } from '../config/config';
 import { Specialty, SpecialtyModel } from './models/Specialty';
 import { Provider, ProviderModel } from './models/Provider';
 
@@ -23,6 +23,7 @@ export class MongoDatabase {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
+    set('debug', general.env === 'develop');
     this.connection = connection;
     this.connection.once('open', this.connected);
     this.connection.on('error', this.errorConnect);

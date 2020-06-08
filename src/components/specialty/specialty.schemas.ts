@@ -1,4 +1,8 @@
-import * as Joi from '@hapi/joi'
+import * as Joi from '@hapi/joi';
+
+export const getAllMap = {
+  name: 'string'
+};
 
 export const getAll = Joi.object({
   offSet: Joi.number().optional(),
@@ -6,6 +10,7 @@ export const getAll = Joi.object({
   name: Joi.string().optional(),
   createdBy: Joi.number().optional(),
   updatedBy: Joi.number().optional(),
+  sort: Joi.string().optional(),
 });
 
 export const create = Joi.object({

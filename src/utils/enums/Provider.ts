@@ -43,9 +43,14 @@ enum ProvideType {
   PA = 'PA'
 }
 
+enum stage {
+  DONE = 'DONE',
+  PENDING = 'PENDING'
+};
 
 export {
   Status,
   StaffStatus,
-  ProvideType
+  ProvideType,
+  stage
 }
