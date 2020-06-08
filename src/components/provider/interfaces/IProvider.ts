@@ -14,6 +14,7 @@ export interface IProvider {
   assignedTo: number;
   status: string;
   stage: string;
+  profilePhoto: string;
   createdBy: number;
   createdAt: Date;
   updatedBy: number;

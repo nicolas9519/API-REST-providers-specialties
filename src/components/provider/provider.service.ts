@@ -27,15 +27,17 @@ export class ProviderService {
     return provider.toJSON();
   }
 
-  public async create(data: Partial<IProvider>): Promise<IProvider> {
+  public async create(data: Partial<IProvider>, nameFile: string): Promise<IProvider> {
     const newProvider = await this.validateDataAndBuild(data);
+    newProvider.profilePhoto = `/files/profile/${nameFile}`;
     const provider = new MongoDatabase.Models.Provider(newProvider);
     await provider.save();
     return provider.toJSON();
   }
 
-  public async update(id: Schema.Types.ObjectId, data: Partial<IProvider>): Promise<IProvider> {
+  public async update(id: Schema.Types.ObjectId, data: Partial<IProvider>, nameFile: string): Promise<IProvider> {
     const updatedProvider = await this.validateDataAndBuild(data, id);
+    updatedProvider.profilePhoto = `/files/profile/${nameFile}`;
     const provider = await MongoDatabase.Models.Provider.findOneAndUpdate({ _id: id }, updatedProvider, { new: true });
     if (!provider) {
       throw ErrorStatus.notFound('Provider not found');

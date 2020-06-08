@@ -19,7 +19,7 @@ export class ProviderController {
     router.get('', this.getAll.bind(this));
     router.post('', UploadFile.createStorage('profile').single('profilePhoto'), this.create.bind(this));
     router.get('/:id', this.getById.bind(this));
-    router.put('/:id', this.update.bind(this));
+    router.put('/:id', UploadFile.createStorage('profile').single('profilePhoto'), this.update.bind(this));
     router.delete('/:id', this.delete.bind(this));
 
     app.use('/provider', router);
@@ -39,7 +39,8 @@ export class ProviderController {
   public async create(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
       const body = validateJoi(create, req.body);
-      const provider = await this.providerService.create(body);
+      const nameFile = req.file.filename;
+      const provider = await this.providerService.create(body, nameFile);
       return responseJson(res, 201, provider);
     } catch (error) {
       next(error);
@@ -60,7 +61,8 @@ export class ProviderController {
     try {
       const id = validateMongoId(req.params.id);
       const body = validateJoi(update, req.body);
-      const provider = await this.providerService.update(id, body);
+      const nameFile = req.file.filename;
+      const provider = await this.providerService.update(id, body, nameFile);
       return responseJson(res, 200, provider);
     } catch (error) {
       next(error);

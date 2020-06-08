@@ -16,6 +16,7 @@ interface IProvider extends Document {
   assignedTo: number;
   status: string;
   stage: string;
+  profilePhoto: string;
   createdBy: number;
   createdAt: Date;
   updatedBy: number;
@@ -57,7 +58,7 @@ export class Provider {
       createdBy: { type: Number },
       updatedBy: { type: Number },
       stage: { type: String },
-      profilePhoto: { type: Buffer }
+      profilePhoto: { type: String }
     }, {
       timestamps: true,
       versionKey: false,
