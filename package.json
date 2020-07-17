@@ -1,12 +1,13 @@
 {
   "name": "api-rest-providers-specialties",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a practice with Node, Express, Mongo and Docker",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node dist/server.js",
-    "dev": "tsc && node -r dotenv/config dist/server.js"
+    "dev": "tsc && node -r dotenv/config dist/server.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

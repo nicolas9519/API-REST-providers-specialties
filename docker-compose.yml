@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  mongo: 
+    container_name: mongo-api-rest
+    image: mongo:latest
+    restart: always
+    volumes:
+      - /usr/mongo/data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE= test
+    ports:
+      - 27017:27017
+  backend:
+    container_name: api-rest
+    restart: always
+    build: .
+    ports:
+      - "3000:3000"
+    environment: 
+      - NODE_ENV=develop
+      - PORT=3000
+      - PATH_HTTP_CERT=/usr/https
+      - FILES_PATH=/usr/files
