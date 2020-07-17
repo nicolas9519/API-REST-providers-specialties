@@ -7,7 +7,7 @@ const general = {
 };
 
 const database = {
-  mongo_db_url: process.env.MONGO_DB_URL
+  mongo_db_url: process.env.MONGO_DB_URL || 'mongodb://mongo:27017/test'
 };
 
 const fileHandler = {
