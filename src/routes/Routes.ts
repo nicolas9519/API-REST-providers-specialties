@@ -28,7 +28,9 @@ export class Routes {
     if (general.env !== 'develop') {
       delete newError.stack;
     }
+    const statusCode = newError.statusCode;
     delete newError.handledError;
-    res.status(newError.statusCode).json(newError);
+    delete newError.statusCode;
+    res.status(statusCode).json(newError);
   }
 }
