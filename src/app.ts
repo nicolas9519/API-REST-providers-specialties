@@ -1,8 +1,9 @@
-import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
 import * as helmet from 'helmet';
-
+import { MongoDatabase } from './db/MongoDatabase';
 import { Routes } from './routes/Routes';
+
 
 class App {
 
@@ -22,6 +23,7 @@ class App {
       extended: true
     }));
     this.app.use(helmet());
+    MongoDatabase.connect();
   }
 
 }

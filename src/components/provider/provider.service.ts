@@ -1,4 +1,5 @@
 import { QueryFindOptions, Schema } from "mongoose";
+import { ProviderModel } from "../../db/models/Provider";
 import { MongoDatabase } from "../../db/MongoDatabase";
 import { ErrorStatus } from "../../utils/ErrorStatus";
 import { IObject } from "../../utils/interfaces/IObject";
@@ -8,19 +9,21 @@ import { IProvider } from "./interfaces/IProvider";
 export class ProviderService {
 
   private specialtyService: SpecialtyService;
+  private providerModel: ProviderModel;
 
   constructor() {
     this.specialtyService = new SpecialtyService();
+    this.providerModel = MongoDatabase.Models.Provider;
   }
 
   public async getAll(filters: IObject<any>, paging: QueryFindOptions, sort: IObject<number>): Promise<{ providers: IProvider[], quantity: number }> {
-    const providers: IProvider[] = await MongoDatabase.Models.Provider.find(filters, null, paging).sort(sort);
-    const quantity = await MongoDatabase.Models.Provider.countDocuments(filters);
+    const providers: IProvider[] = await this.providerModel.find(filters, null, paging).sort(sort);
+    const quantity = await this.providerModel.countDocuments(filters);
     return { providers, quantity };
   }
 
   public async getById(id: Schema.Types.ObjectId): Promise<IProvider> {
-    const provider = await MongoDatabase.Models.Provider.findById(id);
+    const provider = await this.providerModel.findById(id);
     if (!provider) {
       throw ErrorStatus.notFound('Provider not found');
     }
@@ -30,7 +33,7 @@ export class ProviderService {
   public async create(data: Partial<IProvider>, nameFile: string): Promise<IProvider> {
     const newProvider = await this.validateDataAndBuild(data);
     newProvider.profilePhoto = `/files/profile/${nameFile}`;
-    const provider = new MongoDatabase.Models.Provider(newProvider);
+    const provider = new this.providerModel(newProvider);
     await provider.save();
     return provider.toJSON();
   }
@@ -38,7 +41,7 @@ export class ProviderService {
   public async update(id: Schema.Types.ObjectId, data: Partial<IProvider>, nameFile: string): Promise<IProvider> {
     const updatedProvider = await this.validateDataAndBuild(data, id);
     updatedProvider.profilePhoto = `/files/profile/${nameFile}`;
-    const provider = await MongoDatabase.Models.Provider.findOneAndUpdate({ _id: id }, updatedProvider, { new: true });
+    const provider = await this.providerModel.findOneAndUpdate({ _id: id }, updatedProvider, { new: true });
     if (!provider) {
       throw ErrorStatus.notFound('Provider not found');
     }
@@ -46,7 +49,7 @@ export class ProviderService {
   }
 
   public async delete(id: Schema.Types.ObjectId): Promise<IProvider> {
-    const provider = await MongoDatabase.Models.Provider.findOneAndDelete({ _id: id });
+    const provider = await this.providerModel.findOneAndDelete({ _id: id });
     if (!provider) {
       throw ErrorStatus.notFound('Provider not found');
     }
@@ -66,7 +69,7 @@ export class ProviderService {
   }
 
   private async validateEmailProvider(email: string, id?: Schema.Types.ObjectId): Promise<void> {
-    const providerExist = await MongoDatabase.Models.Provider.findOne({ email });
+    const providerExist = await this.providerModel.findOne({ email });
     if (providerExist && providerExist.id !== id) {
       throw ErrorStatus.conflict('A provider with this email already exist', { email });
     }

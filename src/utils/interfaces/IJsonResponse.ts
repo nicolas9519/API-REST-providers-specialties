@@ -1,4 +1,4 @@
-export interface IJsonResponse {
-  data: any;
+export interface IJsonResponse<T> {
+  data: T;
   total?: number;
 };

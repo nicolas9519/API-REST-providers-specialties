@@ -33,6 +33,12 @@ export class MongoDatabase {
     };
   }
 
+  public static connect(): void {
+    if (!MongoDatabase.instance) {
+      MongoDatabase.instance = new MongoDatabase();
+    }
+  }
+
   public static get Models(): IModels {
     if (!MongoDatabase.instance) {
       MongoDatabase.instance = new MongoDatabase();
@@ -45,7 +51,8 @@ export class MongoDatabase {
   }
 
   private errorConnect(error: Error) {
-    throw error;
+    console.log(error);
+    process.exit(1);
   }
 
 }
